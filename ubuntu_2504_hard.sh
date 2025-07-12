@@ -8,6 +8,7 @@ set -euo pipefail
 echo "=== Updating system..."
 apt update && apt full-upgrade -y
 apt autoremove -y
+apt autoclean -y
 
 echo "=== Enabling UFW Firewall..."
 apt install ufw -y
@@ -66,3 +67,16 @@ echo "=== Checking for world-writable files (info only)..."
 find / -xdev -type f -perm -0002 -print
 
 echo "=== DONE: Basic hardening applied ==="
+
+echo "=== nable some basic sysctl settings ==="
+
+echo "net.ipv4.tcp_syncookies=1" | sudo tee -a /etc/sysctl.conf
+echo "net.ipv4.conf.all.rp_filter=1" | sudo tee -a /etc/sysctl.conf
+echo "net.ipv4.conf.default.rp_filter=1" | sudo tee -a /etc/sysctl.conf
+echo "net.ipv4.icmp_echo_ignore_broadcasts=1" | sudo tee -a /etc/sysctl.conf
+echo "net.ipv4.icmp_ignore_bogus_error_responses=1" | sudo tee -a /etc/sysctl.conf
+echo "kernel.randomize_va_space=2" | sudo tee -a /etc/sysctl.conf
+echo "fs.suid_dumpable=0" | sudo tee -a /etc/sysctl.conf
+
+# Apply the sysctl changes
+sysctl -p
