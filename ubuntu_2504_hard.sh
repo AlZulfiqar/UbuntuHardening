@@ -29,7 +29,7 @@ echo "=== Enabling automatic security updates..."
 apt install unattended-upgrades -y
 dpkg-reconfigure --priority=low unattended-upgrades
 
-echo "=== Securing SSH configuration..."
+echo "=== Securing SSH configuration...only required if using openssh server"
 SSH_CONF="/etc/ssh/sshd_config"
 
 sed -i 's/^#*PermitRootLogin.*/PermitRootLogin no/' $SSH_CONF
